@@ -4,8 +4,8 @@
   --border: #e6e4e0;
   --text: #1f1e1c;
   --muted: #6b6862;
-  --accent: #c2683f;
-  --accent-soft: #f5ece6;
+  --accent: #d6156f;
+  --accent-soft: #fdeaf3;
   --radius: 10px;
 }
 
@@ -16,8 +16,8 @@
     --border: #35322f;
     --text: #f0eee9;
     --muted: #a5a09a;
-    --accent: #e08b5f;
-    --accent-soft: #33251d;
+    --accent: #ff69b4;
+    --accent-soft: #3a1c2c;
   }
 }
 
