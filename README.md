@@ -29,7 +29,7 @@
 
 ## 기술 스택
 
-- **Next.js 14** (App Router) + **TypeScript**
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
 - **Supabase** (PostgreSQL + 인증 + Row Level Security)
 - **Vercel** (배포)
 

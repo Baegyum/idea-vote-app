@@ -4,8 +4,11 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * 모든 요청마다 로그인 세션 쿠키를 갱신한다.
  * 이게 없으면 한참 뒤에 새로고침했을 때 갑자기 로그아웃된 것처럼 보인다.
+ *
+ * 파일 이름과 함수 이름이 둘 다 proxy 여야 한다 —
+ * Next 16에서 middleware가 proxy로 이름이 바뀌었다. (동작은 같다)
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

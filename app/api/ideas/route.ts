@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const q = listQuerySchema.parse(Object.fromEntries(url.searchParams));
-    const supabase = createClient();
+    const supabase = await createClient();
 
     let query = supabase
       .from("ideas")
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     if (!user) return fail("로그인이 필요합니다.", 401);
 
     const input = createIdeaSchema.parse(await req.json());
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase
       .from("ideas")

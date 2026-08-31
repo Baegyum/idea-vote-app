@@ -67,6 +67,10 @@ docs: 재환/위진용 첫 설치 가이드 추가
 
 - 언어: TypeScript. `any` 를 쓰지 않는다.
 - 컴포넌트는 기본이 **서버 컴포넌트**. 클릭·입력 등 상호작용이 필요할 때만 파일 맨 위에 `"use client"` 를 붙인다.
+- **Next 16에서 비동기가 된 것들** — 빠뜨리면 타입 오류가 난다:
+  - `params`, `searchParams` 는 Promise다. `const { id } = await params;`
+  - `cookies()` 는 비동기다. 그래서 `lib/supabase/server.ts` 의 `createClient()` 도 비동기다 — `await createClient()`
+  - 세션 갱신 파일은 `middleware.ts` 가 아니라 **`proxy.ts`** 이고, 내보내는 함수 이름도 `proxy` 여야 한다.
 - 데이터 검증은 반드시 `lib/validation.ts` 의 zod 스키마를 거친다. API에서도 다시 검증한다.
 - API 응답은 항상 `lib/api.ts` 의 `ok()` / `fail()` 을 쓴다. 형태를 통일하기 위해서다.
 - 주석은 "무엇을"이 아니라 **"왜"** 를 적는다.

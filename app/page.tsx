@@ -9,10 +9,12 @@ export const dynamic = "force-dynamic";
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: { sort?: string };
+  // Next.js 15부터 searchParams도 Promise다.
+  searchParams: Promise<{ sort?: string }>;
 }) {
-  const sort = searchParams.sort === "recent" ? "recent" : "hot";
-  const supabase = createClient();
+  const { sort: sortParam } = await searchParams;
+  const sort = sortParam === "recent" ? "recent" : "hot";
+  const supabase = await createClient();
   const user = await getCurrentUser();
 
   let query = supabase.from("ideas").select("*, profiles(display_name)").limit(30);

@@ -6,14 +6,20 @@ import CommentForm from "@/components/CommentForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function IdeaDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+export default async function IdeaDetailPage({
+  params,
+}: {
+  // Next.js 15부터 params는 Promise다.
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const supabase = await createClient();
   const user = await getCurrentUser();
 
   const { data: idea } = await supabase
     .from("ideas")
     .select("*, profiles(display_name)")
-    .eq("id", params.id)
+    .eq("id", id)
     .single<Idea>();
 
   if (!idea) notFound();
@@ -21,7 +27,7 @@ export default async function IdeaDetailPage({ params }: { params: { id: string 
   const { data: comments } = await supabase
     .from("comments")
     .select("*, profiles(display_name)")
-    .eq("idea_id", params.id)
+    .eq("idea_id", id)
     .order("created_at", { ascending: true });
 
   let voted = false;
@@ -29,7 +35,7 @@ export default async function IdeaDetailPage({ params }: { params: { id: string 
     const { data } = await supabase
       .from("votes")
       .select("idea_id")
-      .eq("idea_id", params.id)
+      .eq("idea_id", id)
       .eq("voter_id", user.id)
       .maybeSingle();
     voted = !!data;

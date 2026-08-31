@@ -6,8 +6,9 @@ import { cookies } from "next/headers";
  * 쿠키에 담긴 로그인 세션을 읽어오기 때문에, 이 클라이언트로 하는 모든 쿼리는
  * DB의 RLS 정책("본인 것만 수정 가능" 등)을 그대로 통과해야 한다.
  */
-export function createClient() {
-  const cookieStore = cookies();
+export async function createClient() {
+  // Next.js 15부터 cookies()는 비동기다. await를 빠뜨리면 Promise를 쿠키인 척 다루게 된다.
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,7 +32,7 @@ export function createClient() {
 
 /** 로그인한 사용자를 가져온다. 없으면 null. */
 export async function getCurrentUser() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
