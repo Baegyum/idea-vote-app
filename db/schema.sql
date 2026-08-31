@@ -19,7 +19,11 @@ create table if not exists public.profiles (
 -- 2) ideas : 아이디어 본문
 --    status 로 회의 단계를 관리한다 (백로그 → 논의중 → 채택 → 보류)
 -- ------------------------------------------------------------
-create type idea_status as enum ('backlog', 'discussing', 'adopted', 'parked');
+-- 이미 만들어져 있으면 건너뛴다. (이 파일을 두 번 실행해도 에러가 안 나게)
+do $$ begin
+  create type idea_status as enum ('backlog', 'discussing', 'adopted', 'parked');
+exception when duplicate_object then null;
+end $$;
 
 create table if not exists public.ideas (
   id          uuid primary key default gen_random_uuid(),
@@ -120,28 +124,40 @@ alter table public.votes    enable row level security;
 alter table public.comments enable row level security;
 
 -- 읽기: 로그인한 사람은 전부 볼 수 있다
+drop policy if exists "read profiles" on public.profiles;
 create policy "read profiles" on public.profiles for select to authenticated using (true);
-create policy "read ideas"    on public.ideas    for select to authenticated using (true);
-create policy "read votes"    on public.votes    for select to authenticated using (true);
+drop policy if exists "read ideas" on public.ideas;
+create policy "read ideas" on public.ideas for select to authenticated using (true);
+drop policy if exists "read votes" on public.votes;
+create policy "read votes" on public.votes for select to authenticated using (true);
+drop policy if exists "read comments" on public.comments;
 create policy "read comments" on public.comments for select to authenticated using (true);
 
 -- 쓰기: 본인 것만
+drop policy if exists "update own profile" on public.profiles;
 create policy "update own profile" on public.profiles for update to authenticated
   using (id = auth.uid()) with check (id = auth.uid());
 
+drop policy if exists "insert own idea" on public.ideas;
 create policy "insert own idea" on public.ideas for insert to authenticated
   with check (author_id = auth.uid());
+drop policy if exists "update own idea" on public.ideas;
 create policy "update own idea" on public.ideas for update to authenticated
   using (author_id = auth.uid()) with check (author_id = auth.uid());
+drop policy if exists "delete own idea" on public.ideas;
 create policy "delete own idea" on public.ideas for delete to authenticated
   using (author_id = auth.uid());
 
+drop policy if exists "insert own vote" on public.votes;
 create policy "insert own vote" on public.votes for insert to authenticated
   with check (voter_id = auth.uid());
+drop policy if exists "delete own vote" on public.votes;
 create policy "delete own vote" on public.votes for delete to authenticated
   using (voter_id = auth.uid());
 
+drop policy if exists "insert own comment" on public.comments;
 create policy "insert own comment" on public.comments for insert to authenticated
   with check (author_id = auth.uid());
+drop policy if exists "delete own comment" on public.comments;
 create policy "delete own comment" on public.comments for delete to authenticated
   using (author_id = auth.uid());
