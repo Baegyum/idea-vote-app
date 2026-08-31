@@ -17,7 +17,7 @@ export default async function HomePage({
   const supabase = await createClient();
   const user = await getCurrentUser();
 
-  let query = supabase.from("ideas").select("*, profiles(display_name)").limit(30);
+  let query = supabase.from("ideas").select("*, profiles!ideas_author_id_fkey(display_name)").limit(30);
   query =
     sort === "hot"
       ? query.order("vote_count", { ascending: false }).order("created_at", { ascending: false })

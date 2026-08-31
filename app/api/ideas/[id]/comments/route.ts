@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Params) {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("comments")
-      .select("*, profiles(display_name)")
+      .select("*, profiles!comments_author_id_fkey(display_name)")
       .eq("idea_id", id)
       .order("created_at", { ascending: true });
 
@@ -36,7 +36,7 @@ export async function POST(req: Request, { params }: Params) {
     const { data, error } = await supabase
       .from("comments")
       .insert({ idea_id: id, author_id: user.id, body: input.body })
-      .select("*, profiles(display_name)")
+      .select("*, profiles!comments_author_id_fkey(display_name)")
       .single();
 
     if (error) return fail(error.message, 400);

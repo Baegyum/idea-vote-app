@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Params) {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("ideas")
-      .select("*, profiles(display_name), comments(*, profiles(display_name))")
+      .select("*, profiles!ideas_author_id_fkey(display_name), comments(*, profiles!comments_author_id_fkey(display_name))")
       .eq("id", id)
       .single();
 

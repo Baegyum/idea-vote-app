@@ -18,7 +18,7 @@ export default async function IdeaDetailPage({
 
   const { data: idea } = await supabase
     .from("ideas")
-    .select("*, profiles(display_name)")
+    .select("*, profiles!ideas_author_id_fkey(display_name)")
     .eq("id", id)
     .single<Idea>();
 
@@ -26,7 +26,7 @@ export default async function IdeaDetailPage({
 
   const { data: comments } = await supabase
     .from("comments")
-    .select("*, profiles(display_name)")
+    .select("*, profiles!comments_author_id_fkey(display_name)")
     .eq("idea_id", id)
     .order("created_at", { ascending: true });
 

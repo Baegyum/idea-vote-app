@@ -14,7 +14,7 @@ export async function GET(req: Request) {
 
     let query = supabase
       .from("ideas")
-      .select("*, profiles(display_name)")
+      .select("*, profiles!ideas_author_id_fkey(display_name)")
       .limit(q.limit);
 
     if (q.status !== "all") query = query.eq("status", q.status);
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     const { data, error } = await supabase
       .from("ideas")
       .insert({ ...input, author_id: user.id })
-      .select("*, profiles(display_name)")
+      .select("*, profiles!ideas_author_id_fkey(display_name)")
       .single();
 
     if (error) return fail(error.message, 400);
