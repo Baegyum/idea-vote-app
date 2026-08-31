@@ -103,3 +103,13 @@ docs/         팀 문서 (초보자 가이드, 회의 규칙)
 `db/schema.sql` 은 **규민의 승인 없이 수정하지 않는다.** 스키마 변경이 필요하면
 PR 설명에 "DB 변경 필요"라고 적고 규민에게 알린다. 스키마는 한 번 꼬이면
 세 명 모두의 로컬 환경이 동시에 망가지기 때문이다.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
