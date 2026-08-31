@@ -5,11 +5,14 @@
 
 ---
 
+🌐 **배포된 앱: https://idea-vote-app.vercel.app**
+
 ## 👋 처음 오셨나요?
 
 | 나는 | 이 문서부터 |
 |---|---|
 | 재환 · 위진 (개발 처음) | **[docs/00-처음-시작하기.md](docs/00-처음-시작하기.md)** ← 여기부터, 순서대로 |
+| 설치는 끝났고 첫 PR을 올릴 차례 | **[docs/05-첫-실습-한바퀴.md](docs/05-첫-실습-한바퀴.md)** |
 | 규민 (저장소 세팅) | [docs/03-규민용-저장소-세팅.md](docs/03-규민용-저장소-세팅.md) |
 | 에러가 나서 멘붕 | [docs/04-막혔을때.md](docs/04-막혔을때.md) |
 
@@ -49,4 +52,5 @@ npm run dev
 - [CLAUDE.md](CLAUDE.md) — 클로드 코드와 팀이 지키는 규칙
 - [docs/01-git-기초.md](docs/01-git-기초.md) — 매일 쓰는 Git 명령어 7개
 - [docs/02-회의-워크플로우.md](docs/02-회의-워크플로우.md) — Notion·카톡·GitHub 운영 방식
+- [docs/05-첫-실습-한바퀴.md](docs/05-첫-실습-한바퀴.md) — clone부터 PR까지 실습 가이드
 - [db/schema.sql](db/schema.sql) — 데이터베이스 설계
