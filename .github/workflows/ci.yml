@@ -1,0 +1,37 @@
+# PR이 올라오면 GitHub이 자동으로 이 검사를 돌립니다.
+# 초록 체크가 뜨면 "최소한 부서지지는 않았다"는 뜻입니다.
+# 빨간 X가 떠도 큰일 난 게 아닙니다 — 로그를 열어 무엇이 틀렸는지 보고 고치면 됩니다.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 타입 검사
+        run: npm run typecheck
+
+      - name: 코드 스타일 검사
+        run: npm run lint
+
+      - name: 빌드
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-key-for-build

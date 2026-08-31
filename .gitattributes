@@ -1,0 +1,20 @@
+# 줄바꿈(개행) 문자를 저장소 안에서는 LF로 통일합니다.
+#
+# 왜 필요한가:
+#   윈도우는 줄바꿈을 CRLF, 맥/리눅스는 LF로 저장합니다.
+#   이 설정이 없으면 파일을 열기만 해도 "전체 줄이 바뀌었다"고 표시되어,
+#   PR에 실제로 고친 3줄 대신 300줄이 빨갛게 뜹니다. 리뷰가 불가능해집니다.
+#
+# 세 명이 각자 다른 환경을 쓰게 되더라도 이 파일 하나로 방지됩니다.
+
+* text=auto eol=lf
+
+# 이미지 등 바이너리 파일은 건드리지 않습니다
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.woff binary
+*.woff2 binary

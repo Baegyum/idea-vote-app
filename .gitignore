@@ -1,0 +1,30 @@
+# 의존성
+node_modules/
+.pnp
+.pnp.js
+
+# 빌드 결과물
+.next/
+out/
+build/
+dist/
+
+# 환경변수 (★ 절대 커밋 금지 — 비밀번호/키가 들어있음)
+.env
+.env.local
+.env*.local
+
+# 로그
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 타입스크립트
+*.tsbuildinfo
+next-env.d.ts

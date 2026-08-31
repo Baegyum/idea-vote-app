@@ -1,0 +1,9 @@
+# 이 저장소의 모든 파일은 규민(@Baegyum)의 리뷰가 있어야 머지할 수 있습니다.
+# PR이 열리면 GitHub이 자동으로 규민을 리뷰어로 지정합니다.
+
+*                @Baegyum
+
+# 특히 민감한 파일들 (스키마, CI, 팀 규칙)
+/db/             @Baegyum
+/.github/        @Baegyum
+/CLAUDE.md       @Baegyum
