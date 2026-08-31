@@ -49,7 +49,11 @@ export default async function HomePage({
       </div>
 
       {!ideas?.length && (
-        <p className="empty">아직 아이디어가 없어요. 첫 번째로 올려보세요!</p>
+        <p className="empty">
+          아직 아이디어가 없어요 🌱
+          <br />
+          규민 · 재환 · 위진 중 누가 먼저 올릴까요?
+        </p>
       )}
 
       {(ideas as Idea[] | null)?.map((idea) => (
