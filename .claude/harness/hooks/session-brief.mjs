@@ -32,14 +32,15 @@ if (branch === null) {
 lines.push(`현재 브랜치: ${branch}`);
 if (branch === "main" || branch === "master") {
   lines.push(
-    `주의: ${branch} 위에 있습니다. 코드를 고치기 전에 먼저 브랜치를 만들어야 합니다 (커밋/푸시는 하네스가 차단합니다).`,
+    `주의: ${branch} 에 있습니다. 여기서는 저장 지점 만들기와 GitHub에 올리기가 하네스에 의해 차단됩니다.`,
+    `코드를 고치기 전에 new-work 스킬로 '내 복사본'을 먼저 만드세요. 사용자에게는 /new-work 라고 안내하면 됩니다.`,
   );
 }
 
 const dirty = git("status --porcelain");
 if (dirty) {
   const count = dirty.split("\n").filter(Boolean).length;
-  lines.push(`아직 커밋 안 된 변경: ${count}개 파일`);
+  lines.push(`아직 저장 지점에 담기지 않은 변경: ${count}개 파일`);
 }
 
 // 개발 서버 포트를 다른 폴더의 프로젝트가 점유하고 있으면 알려준다.
