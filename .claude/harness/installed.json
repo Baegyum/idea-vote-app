@@ -1,6 +1,8 @@
 {
   "skills": [
-    "new-work"
+    "close-work",
+    "new-work",
+    "pr"
   ],
   "hooks": [
     "guard-bash.mjs",
