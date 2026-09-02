@@ -28,3 +28,6 @@ Thumbs.db
 # 타입스크립트
 *.tsbuildinfo
 next-env.d.ts
+
+# 클로드 코드 개인 설정 (사람마다 다름)
+.claude/settings.local.json

@@ -1,0 +1,9 @@
+{
+  "skills": [
+    "new-work"
+  ],
+  "hooks": [
+    "guard-bash.mjs",
+    "session-brief.mjs"
+  ]
+}
