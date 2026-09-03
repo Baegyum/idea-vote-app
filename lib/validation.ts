@@ -20,6 +20,10 @@ export const createCommentSchema = z.object({
   body: z.string().trim().min(1, "내용을 입력하세요").max(1000, "1000자 이하"),
 });
 
+export const signInSchema = z.object({
+  email: z.string().trim().email("이메일 주소 형식이 아닙니다"),
+});
+
 export const listQuerySchema = z.object({
   sort: z.enum(["hot", "recent"]).default("hot"),
   status: z.enum(["all", "backlog", "discussing", "adopted", "parked"]).default("all"),

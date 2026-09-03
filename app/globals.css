@@ -39,7 +39,7 @@ a { color: inherit; text-decoration: none; }
    로그인 버튼 너비와 상관없이 화면 정중앙에 온다. */
 header.site {
   display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
+  align-items: center; gap: 12px;
   padding: 16px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px;
 }
 header.site > *:first-child { grid-column: 2; }
@@ -91,8 +91,25 @@ input, textarea {
 }
 textarea { min-height: 140px; resize: vertical; }
 
-.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-.tabs a { font-size: 14px; padding: 6px 12px; border-radius: 999px; color: var(--muted); }
-.tabs a.on { background: var(--accent-soft); color: var(--accent); }
 
 .empty { text-align: center; color: var(--muted); padding: 48px 0; }
+
+
+/* 머리말 안에 들어가는 로그인 입력칸.
+   전역 input 규칙(가로 100%, 아래 여백)을 그대로 쓰면 머리말이 무너져서 여기서만 되돌린다. */
+.signin { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; width: 100%; }
+/* 입력칸이 남는 자리만 차지하게 해야 "링크 받기" 버튼이 아래로 밀리지 않는다. */
+.signin input { flex: 1 1 120px; min-width: 0; margin-bottom: 0; }
+.signin .btn { flex: none; white-space: nowrap; }
+.signin-error { flex-basis: 100%; margin: 4px 0 0; text-align: right; font-size: 13px; color: var(--accent); }
+
+/* 사람별 보드. 한 사람이 한 열을 차지한다.
+   최소 200px을 못 채우면 열이 자동으로 아래로 내려가므로, 좁은 화면에서도 안 뭉개진다. */
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; }
+.board .column { min-width: 0; }
+.board h3.owner { margin: 0; font-size: 15px; }
+.board .column > .meta { margin: 2px 0 10px; }
+/* 열이 좁으므로 카드 여백과 투표 버튼을 목록 화면보다 줄인다. */
+.board .card { padding: 12px; gap: 10px; margin-bottom: 10px; }
+.board .card h3 { font-size: 14px; }
+.board .vote { min-width: 44px; padding: 6px 0; }

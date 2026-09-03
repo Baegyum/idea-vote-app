@@ -31,3 +31,18 @@ export interface Comment {
   created_at: string;
   profiles?: { display_name: string } | null;
 }
+
+/** 로그인한 팀원. profiles 테이블의 한 행. */
+export interface Profile {
+  id: string;
+  display_name: string;
+}
+
+/**
+ * 목록·보드에서 쓰는 아이디어 요약.
+ * 본문(body)은 상세 화면에서만 필요한데 행에서 가장 큰 칸이라, 목록에서는 빼고 가져온다.
+ */
+export type IdeaSummary = Pick<
+  Idea,
+  "id" | "author_id" | "title" | "status" | "vote_count" | "comment_count"
+>;
