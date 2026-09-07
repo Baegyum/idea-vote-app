@@ -49,10 +49,8 @@ export interface Profile {
 }
 
 /**
- * 목록·보드에서 쓰는 아이디어 요약.
- * 본문(body)은 상세 화면에서만 필요한데 행에서 가장 큰 칸이라, 목록에서는 빼고 가져온다.
+ * 홈에서 쓰는 아이디어 요약.
+ * 홈은 아이디어를 "누가 몇 개를 언제 올렸고 몇 표를 받았나"로만 접어 보여주므로,
+ * 화면에 안 나오는 칸까지 가져오지 않도록 딱 세 칸만 담는다.
  */
-export type IdeaSummary = Pick<
-  Idea,
-  "id" | "author_id" | "title" | "status" | "vote_count" | "comment_count" | "created_at"
->;
+export type IdeaSummary = Pick<Idea, "author_id" | "vote_count" | "created_at">;

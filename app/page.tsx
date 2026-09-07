@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { type IdeaSummary, type Post, type Profile } from "@/lib/types";
 import PeopleList, { type MemberSummary } from "@/components/PeopleList";
 import PostForm from "@/components/PostForm";
@@ -19,12 +19,14 @@ export default async function HomePage() {
   const supabase = await createClient();
 
   // 서로를 기다릴 이유가 없는 요청들이라 한꺼번에 보낸다. 하나씩 기다리면 홈이 그만큼 느려진다.
-  const [user, { data: members }, { data: ideas }, { data: posts }] = await Promise.all([
-    getCurrentUser(),
+  const [{ data: auth }, { data: members }, { data: ideas }, { data: posts }] = await Promise.all([
+    supabase.auth.getUser(),
     supabase.from("profiles").select("id, display_name").order("display_name"),
     supabase
+      // 홈은 아이디어를 사람별 개수·표수로만 접어 보여준다. 제목·상태 같은 나머지 칸은
+      // 상세 화면에서만 쓰이므로 가져오지 않는다.
       .from("ideas")
-      .select("id, author_id, title, status, vote_count, comment_count, created_at")
+      .select("author_id, vote_count, created_at")
       .order("created_at", { ascending: false })
       .limit(IDEA_LIMIT),
     supabase
@@ -33,6 +35,7 @@ export default async function HomePage() {
       .order("created_at", { ascending: false })
       .limit(POST_LIMIT),
   ]);
+  const user = auth.user;
 
   // 한 번 받아온 아이디어를 사람별로 접는다. 사람 수만큼 쿼리를 날리지 않기 위해서다.
   const summary = new Map<string, { ideaCount: number; voteCount: number; latestIdeaAt: string }>();
@@ -86,7 +89,7 @@ export default async function HomePage() {
           {!board.length && <p className="empty">아직 올라온 글이 없어요.</p>}
 
           {board.map((post) => (
-            <article key={post.id} className="card post">
+            <article key={post.id} className="card">
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3>{post.title}</h3>
                 <p className="meta">

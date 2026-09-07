@@ -179,9 +179,8 @@ drop policy if exists "delete own comment" on public.comments;
 create policy "delete own comment" on public.comments for delete to authenticated
   using (author_id = auth.uid());
 
+-- 글 지우기 규칙은 아직 넣지 않는다. 지우는 화면이 없어서 쓰이지 않는 권한이 되고,
+-- 스키마 변경은 규민의 승인을 거치므로 실제로 필요해질 때 같이 올린다.
 drop policy if exists "insert own post" on public.posts;
 create policy "insert own post" on public.posts for insert to authenticated
   with check (author_id = auth.uid());
-drop policy if exists "delete own post" on public.posts;
-create policy "delete own post" on public.posts for delete to authenticated
-  using (author_id = auth.uid());
