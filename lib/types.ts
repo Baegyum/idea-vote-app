@@ -32,6 +32,16 @@ export interface Comment {
   profiles?: { display_name: string } | null;
 }
 
+/** 자유 게시판의 글 한 개. 아이디어와 달리 투표·회의 단계가 없다. */
+export interface Post {
+  id: string;
+  author_id: string;
+  title: string;
+  body: string;
+  created_at: string;
+  profiles?: { display_name: string } | null;
+}
+
 /** 로그인한 팀원. profiles 테이블의 한 행. */
 export interface Profile {
   id: string;
@@ -39,10 +49,8 @@ export interface Profile {
 }
 
 /**
- * 목록·보드에서 쓰는 아이디어 요약.
- * 본문(body)은 상세 화면에서만 필요한데 행에서 가장 큰 칸이라, 목록에서는 빼고 가져온다.
+ * 홈에서 쓰는 아이디어 요약.
+ * 홈은 아이디어를 "누가 몇 개를 언제 올렸고 몇 표를 받았나"로만 접어 보여주므로,
+ * 화면에 안 나오는 칸까지 가져오지 않도록 딱 세 칸만 담는다.
  */
-export type IdeaSummary = Pick<
-  Idea,
-  "id" | "author_id" | "title" | "status" | "vote_count" | "comment_count"
->;
+export type IdeaSummary = Pick<Idea, "author_id" | "vote_count" | "created_at">;

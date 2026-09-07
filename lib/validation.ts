@@ -16,6 +16,11 @@ export const updateIdeaSchema = z.object({
   status: z.enum(["backlog", "discussing", "adopted", "parked"]).optional(),
 });
 
+export const createPostSchema = z.object({
+  title: z.string().trim().min(2, "제목은 2자 이상").max(80, "제목은 80자 이하"),
+  body: z.string().trim().max(4000, "본문은 4000자 이하").default(""),
+});
+
 export const createCommentSchema = z.object({
   body: z.string().trim().min(1, "내용을 입력하세요").max(1000, "1000자 이하"),
 });

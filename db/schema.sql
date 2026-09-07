@@ -68,6 +68,20 @@ create table if not exists public.comments (
 create index if not exists comments_idea_idx on public.comments (idea_id, created_at);
 
 -- ------------------------------------------------------------
+-- 4-1) posts : 아이디어와 별개인 자유 게시판 (공지·잡담)
+--      투표나 회의 단계가 없는 글이라 ideas 와 섞지 않고 따로 둔다.
+-- ------------------------------------------------------------
+create table if not exists public.posts (
+  id         uuid primary key default gen_random_uuid(),
+  author_id  uuid not null references public.profiles(id) on delete cascade,
+  title      text not null check (char_length(title) between 2 and 80),
+  body       text not null default '' check (char_length(body) <= 4000),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists posts_recent_idx on public.posts (created_at desc);
+
+-- ------------------------------------------------------------
 -- 5) 집계 캐시를 자동으로 맞춰주는 트리거
 -- ------------------------------------------------------------
 create or replace function public.sync_vote_count() returns trigger
@@ -122,6 +136,7 @@ alter table public.profiles enable row level security;
 alter table public.ideas    enable row level security;
 alter table public.votes    enable row level security;
 alter table public.comments enable row level security;
+alter table public.posts    enable row level security;
 
 -- 읽기: 로그인한 사람은 전부 볼 수 있다
 drop policy if exists "read profiles" on public.profiles;
@@ -132,6 +147,8 @@ drop policy if exists "read votes" on public.votes;
 create policy "read votes" on public.votes for select to authenticated using (true);
 drop policy if exists "read comments" on public.comments;
 create policy "read comments" on public.comments for select to authenticated using (true);
+drop policy if exists "read posts" on public.posts;
+create policy "read posts" on public.posts for select to authenticated using (true);
 
 -- 쓰기: 본인 것만
 drop policy if exists "update own profile" on public.profiles;
@@ -161,3 +178,9 @@ create policy "insert own comment" on public.comments for insert to authenticate
 drop policy if exists "delete own comment" on public.comments;
 create policy "delete own comment" on public.comments for delete to authenticated
   using (author_id = auth.uid());
+
+-- 글 지우기 규칙은 아직 넣지 않는다. 지우는 화면이 없어서 쓰이지 않는 권한이 되고,
+-- 스키마 변경은 규민의 승인을 거치므로 실제로 필요해질 때 같이 올린다.
+drop policy if exists "insert own post" on public.posts;
+create policy "insert own post" on public.posts for insert to authenticated
+  with check (author_id = auth.uid());
