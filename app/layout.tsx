@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { getCurrentUser } from "@/lib/supabase/server";
 import AuthButton from "@/components/AuthButton";
+import { emailToUsername } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "아이디어 보드",
@@ -20,7 +21,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Link href="/">
               <h1>💡 아이디어 보드</h1>
             </Link>
-            <AuthButton email={user?.email ?? null} />
+            <AuthButton username={emailToUsername(user?.email)} />
           </header>
           {children}
         </div>
