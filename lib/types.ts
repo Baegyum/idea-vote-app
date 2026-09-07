@@ -32,6 +32,16 @@ export interface Comment {
   profiles?: { display_name: string } | null;
 }
 
+/** 자유 게시판의 글 한 개. 아이디어와 달리 투표·회의 단계가 없다. */
+export interface Post {
+  id: string;
+  author_id: string;
+  title: string;
+  body: string;
+  created_at: string;
+  profiles?: { display_name: string } | null;
+}
+
 /** 로그인한 팀원. profiles 테이블의 한 행. */
 export interface Profile {
   id: string;
@@ -44,5 +54,5 @@ export interface Profile {
  */
 export type IdeaSummary = Pick<
   Idea,
-  "id" | "author_id" | "title" | "status" | "vote_count" | "comment_count"
+  "id" | "author_id" | "title" | "status" | "vote_count" | "comment_count" | "created_at"
 >;
