@@ -63,6 +63,8 @@ header.site h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
 .meta { color: var(--muted); font-size: 13px; }
 
 .btn {
+  /* 로그인 버튼은 링크(<a>)다. 링크는 기본이 inline 이라 위아래 여백이 무시된다. */
+  display: inline-block;
   border: 1px solid var(--border); background: var(--surface); color: var(--text);
   border-radius: 8px; padding: 8px 14px; font-size: 14px; cursor: pointer;
   font-family: inherit;
@@ -96,13 +98,22 @@ textarea { min-height: 140px; resize: vertical; }
 .empty { text-align: center; color: var(--muted); padding: 48px 0; }
 
 
-/* 머리말 안에 들어가는 로그인 입력칸.
-   전역 input 규칙(가로 100%, 아래 여백)을 그대로 쓰면 머리말이 무너져서 여기서만 되돌린다. */
-.signin { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; width: 100%; }
-/* 입력칸이 남는 자리만 차지하게 해야 "링크 받기" 버튼이 아래로 밀리지 않는다. */
-.signin input { flex: 1 1 120px; min-width: 0; margin-bottom: 0; }
-.signin .btn { flex: none; white-space: nowrap; }
-.signin-error { flex-basis: 100%; margin: 4px 0 0; text-align: right; font-size: 13px; color: var(--accent); }
+/* 로그인 / 회원가입 전환 탭.
+   두 화면이 거의 같아서, 지금 어느 쪽인지 항상 보이지 않으면 헷갈린다. */
+.modes { display: flex; gap: 6px; margin-bottom: 22px; }
+.modes button {
+  flex: 1; padding: 9px 12px; border-radius: 999px; font-size: 14px;
+  border: 1px solid transparent; background: none; color: var(--muted);
+  font-family: inherit; cursor: pointer;
+}
+.modes button:hover { color: var(--text); }
+.modes button.on {
+  background: var(--accent-soft); border-color: var(--accent);
+  color: var(--accent); font-weight: 600;
+}
+
+/* 입력칸 위 이름표. 전역 input 의 아래 여백과 붙어 보이지 않게 간격을 준다. */
+.field { display: block; margin-bottom: 4px; }
 
 /* 홈: 왼쪽에 팀원 요약(고정 폭), 가운데에 게시판(남는 폭 전부). */
 .home { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; margin-top: 20px; align-items: start; }
