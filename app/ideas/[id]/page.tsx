@@ -3,6 +3,7 @@ import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { STATUS_LABEL, type Comment, type Idea } from "@/lib/types";
 import VoteButton from "@/components/VoteButton";
 import CommentForm from "@/components/CommentForm";
+import CommentItem from "@/components/CommentItem";
 
 export const dynamic = "force-dynamic";
 
@@ -61,13 +62,7 @@ export default async function IdeaDetailPage({
 
       <h3 style={{ marginTop: 40 }}>의견 {comments?.length ?? 0}</h3>
       {(comments as Comment[] | null)?.map((c) => (
-        <div key={c.id} className="card" style={{ display: "block" }}>
-          <p className="meta" style={{ margin: 0 }}>
-            {c.profiles?.display_name ?? "익명"} ·{" "}
-            {new Date(c.created_at).toLocaleString("ko-KR")}
-          </p>
-          <p style={{ margin: "4px 0 0", whiteSpace: "pre-wrap" }}>{c.body}</p>
-        </div>
+        <CommentItem key={c.id} comment={c} mine={c.author_id === user?.id} />
       ))}
 
       {user ? (

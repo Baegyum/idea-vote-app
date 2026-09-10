@@ -62,8 +62,21 @@ create table if not exists public.comments (
   idea_id    uuid not null references public.ideas(id) on delete cascade,
   author_id  uuid not null references public.profiles(id) on delete cascade,
   body       text not null check (char_length(body) between 1 and 1000),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  -- 고친 시각. 처음 쓸 때는 created_at 과 같은 값이라, 두 값이 다르면 "고쳤다"는 뜻이 된다.
+  updated_at timestamptz not null default now()
 );
+
+-- 위 create table 은 표가 이미 있으면 통째로 건너뛴다. 그래서 먼저 만들어져 있던
+-- DB 에는 updated_at 이 안 생긴다. 아래 세 줄이 그 경우를 메운다.
+--
+-- 처음부터 not null default now() 로 붙이면 안 된다. 그러면 이미 있던 의견들의
+-- updated_at 에 "칸을 추가한 시각"이 들어가서, 아무도 안 고친 옛 의견까지
+-- 전부 "(수정됨)"으로 보인다. 그래서 빈 칸으로 붙인 뒤 쓴 시각으로 채운다.
+alter table public.comments add column if not exists updated_at timestamptz;
+update public.comments set updated_at = created_at where updated_at is null;
+alter table public.comments alter column updated_at set default now();
+alter table public.comments alter column updated_at set not null;
 
 create index if not exists comments_idea_idx on public.comments (idea_id, created_at);
 
@@ -175,6 +188,9 @@ create policy "delete own vote" on public.votes for delete to authenticated
 drop policy if exists "insert own comment" on public.comments;
 create policy "insert own comment" on public.comments for insert to authenticated
   with check (author_id = auth.uid());
+drop policy if exists "update own comment" on public.comments;
+create policy "update own comment" on public.comments for update to authenticated
+  using (author_id = auth.uid()) with check (author_id = auth.uid());
 drop policy if exists "delete own comment" on public.comments;
 create policy "delete own comment" on public.comments for delete to authenticated
   using (author_id = auth.uid());
