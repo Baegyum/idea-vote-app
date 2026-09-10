@@ -129,6 +129,10 @@ textarea { min-height: 140px; resize: vertical; }
 .person-name { font-size: 15px; font-weight: 600; }
 .person .meta { margin: 2px 0 0; }
 .new-mark { color: var(--accent); margin-left: 4px; }
+.idea-links { list-style: none; margin: 6px 0 0; padding: 0; }
+.idea-links li { margin-top: 4px; }
+.idea-links a { font-size: 14px; color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.idea-links a:hover { color: var(--accent); }
 
 .post-form input { margin-bottom: 8px; }
 .post-body { margin: 8px 0 0; white-space: pre-wrap; }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useSyncExternalStore } from "react";
 
 export interface MemberSummary {
@@ -9,6 +10,8 @@ export interface MemberSummary {
   voteCount: number;
   /** 이 사람이 가장 최근에 올린 아이디어 시각. 없으면 null. */
   latestIdeaAt: string | null;
+  /** 이 사람이 올린 아이디어들. 클릭하면 상세페이지로 이동한다. */
+  ideas: { id: string; title: string }[];
 }
 
 const SEEN_KEY = "lastSeenIdeasAt";
@@ -51,6 +54,15 @@ export default function PeopleList({ members }: { members: MemberSummary[] }) {
           <p className="meta">
             아이디어 {m.ideaCount}개 · 받은 투표 {m.voteCount}표
           </p>
+          {m.ideas.length > 0 && (
+            <ul className="idea-links">
+              {m.ideas.map((idea) => (
+                <li key={idea.id}>
+                  <Link href={`/ideas/${idea.id}`}>{idea.title}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       ))}
     </aside>
