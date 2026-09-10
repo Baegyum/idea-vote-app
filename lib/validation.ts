@@ -25,6 +25,9 @@ export const createCommentSchema = z.object({
   body: z.string().trim().min(1, "내용을 입력하세요").max(1000, "1000자 이하"),
 });
 
+/** 수정도 새로 쓸 때와 같은 규칙을 지켜야 한다. 빈 내용으로 고쳐 지우는 것을 막는다. */
+export const updateCommentSchema = createCommentSchema;
+
 /**
  * 로그인·회원가입에 쓰는 아이디와 비밀번호.
  *

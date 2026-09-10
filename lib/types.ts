@@ -29,6 +29,8 @@ export interface Comment {
   author_id: string;
   body: string;
   created_at: string;
+  /** 고친 시각. created_at 과 다르면 화면에 "(수정됨)"을 붙인다. */
+  updated_at: string;
   profiles?: { display_name: string } | null;
 }
 
