@@ -37,24 +37,27 @@ export default async function HomePage() {
   ]);
   const user = auth.user;
 
+  // 목록 한 줄에 필요한 칸만 추린다. 아래 두 군데에서 같은 모양을 만들므로 한곳에 모아둔다.
+  const listItem = (i: IdeaSummary) => ({ id: i.id, title: i.title, vote_count: i.vote_count });
+
   // 한 번 받아온 아이디어를 사람별로 접는다. 사람 수만큼 쿼리를 날리지 않기 위해서다.
   const summary = new Map<
     string,
-    { ideaCount: number; voteCount: number; latestIdeaAt: string; ideas: { id: string; title: string }[] }
+    { ideaCount: number; voteCount: number; latestIdeaAt: string; ideas: MemberSummary["ideas"] }
   >();
   for (const idea of (ideas ?? []) as IdeaSummary[]) {
     const prev = summary.get(idea.author_id);
     if (prev) {
       prev.ideaCount += 1;
       prev.voteCount += idea.vote_count;
-      prev.ideas.push({ id: idea.id, title: idea.title });
+      prev.ideas.push(listItem(idea));
       // 아이디어는 최신순으로 받아왔으므로 처음 만난 것이 가장 최근이다.
     } else {
       summary.set(idea.author_id, {
         ideaCount: 1,
         voteCount: idea.vote_count,
         latestIdeaAt: idea.created_at,
-        ideas: [{ id: idea.id, title: idea.title }],
+        ideas: [listItem(idea)],
       });
     }
   }
