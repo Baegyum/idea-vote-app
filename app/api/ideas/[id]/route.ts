@@ -5,14 +5,14 @@ import { ok, fail, handleError } from "@/lib/api";
 // Next.js 15부터 params는 Promise다. 반드시 await 해서 꺼내 쓴다.
 type Params = { params: Promise<{ id: string }> };
 
-/** GET /api/ideas/:id — 아이디어 하나 + 댓글 */
+/** GET /api/ideas/:id — 아이디어 하나 + 팀원들이 남긴 찬반과 이유 */
 export async function GET(_req: Request, { params }: Params) {
   try {
     const { id } = await params;
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("ideas")
-      .select("*, profiles!ideas_author_id_fkey(display_name), comments(*, profiles!comments_author_id_fkey(display_name))")
+      .select("*, profiles!ideas_author_id_fkey(display_name), reactions(*, profiles!reactions_user_id_fkey(display_name))")
       .eq("id", id)
       .single();
 
