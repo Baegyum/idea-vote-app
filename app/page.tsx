@@ -23,10 +23,10 @@ export default async function HomePage() {
     supabase.auth.getUser(),
     supabase.from("profiles").select("id, display_name").order("display_name"),
     supabase
-      // 홈은 아이디어를 사람별로 접어 보여주지만, 각 아이디어는 상세페이지로
-      // 클릭해 들어갈 수 있어야 하므로 id·title 도 함께 가져온다.
+      // 홈은 아이디어를 사람별로 접어 보여주지만, 펼치면 제목을 눌러 상세페이지로
+      // 갈 수 있고 찬반 수도 보이므로 id·title·찬반 수까지 함께 가져온다.
       .from("ideas")
-      .select("id, author_id, title, vote_count, created_at")
+      .select("id, author_id, title, agree_count, disagree_count, created_at")
       .order("created_at", { ascending: false })
       .limit(IDEA_LIMIT),
     supabase
@@ -38,24 +38,29 @@ export default async function HomePage() {
   const user = auth.user;
 
   // 목록 한 줄에 필요한 칸만 추린다. 아래 두 군데에서 같은 모양을 만들므로 한곳에 모아둔다.
-  const listItem = (i: IdeaSummary) => ({ id: i.id, title: i.title, vote_count: i.vote_count });
+  const listItem = (i: IdeaSummary) => ({
+    id: i.id,
+    title: i.title,
+    agree_count: i.agree_count,
+    disagree_count: i.disagree_count,
+  });
 
   // 한 번 받아온 아이디어를 사람별로 접는다. 사람 수만큼 쿼리를 날리지 않기 위해서다.
   const summary = new Map<
     string,
-    { ideaCount: number; voteCount: number; latestIdeaAt: string; ideas: MemberSummary["ideas"] }
+    { ideaCount: number; agreeCount: number; latestIdeaAt: string; ideas: MemberSummary["ideas"] }
   >();
   for (const idea of (ideas ?? []) as IdeaSummary[]) {
     const prev = summary.get(idea.author_id);
     if (prev) {
       prev.ideaCount += 1;
-      prev.voteCount += idea.vote_count;
+      prev.agreeCount += idea.agree_count;
       prev.ideas.push(listItem(idea));
       // 아이디어는 최신순으로 받아왔으므로 처음 만난 것이 가장 최근이다.
     } else {
       summary.set(idea.author_id, {
         ideaCount: 1,
-        voteCount: idea.vote_count,
+        agreeCount: idea.agree_count,
         latestIdeaAt: idea.created_at,
         ideas: [listItem(idea)],
       });
@@ -68,7 +73,7 @@ export default async function HomePage() {
       id: m.id,
       display_name: m.display_name,
       ideaCount: s?.ideaCount ?? 0,
-      voteCount: s?.voteCount ?? 0,
+      agreeCount: s?.agreeCount ?? 0,
       latestIdeaAt: s?.latestIdeaAt ?? null,
       ideas: s?.ideas ?? [],
     };

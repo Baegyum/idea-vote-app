@@ -7,7 +7,7 @@ import { emailToUsername } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "아이디어 보드",
-  description: "팀의 아이디어를 모으고, 투표하고, 회의로 이어가는 보드",
+  description: "팀의 아이디어를 모으고, 찬반과 이유를 나누고, 회의로 이어가는 보드",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

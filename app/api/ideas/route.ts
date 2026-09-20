@@ -3,8 +3,8 @@ import { createIdeaSchema, listQuerySchema } from "@/lib/validation";
 import { ok, fail, handleError } from "@/lib/api";
 
 /**
- * GET /api/ideas?sort=hot|recent&status=all&limit=20&cursor=...
- * 아이디어 목록. 커서 페이지네이션이라 데이터가 수만 건이 되어도 느려지지 않는다.
+ * GET /api/ideas?status=all&limit=20&cursor=...
+ * 아이디어 목록. 항상 최신순이다. 커서 페이지네이션이라 데이터가 수만 건이 되어도 느려지지 않는다.
  */
 export async function GET(req: Request) {
   try {
@@ -19,18 +19,13 @@ export async function GET(req: Request) {
 
     if (q.status !== "all") query = query.eq("status", q.status);
 
-    if (q.sort === "hot") {
-      query = query.order("vote_count", { ascending: false }).order("created_at", { ascending: false });
-    } else {
-      query = query.order("created_at", { ascending: false });
-      if (q.cursor) query = query.lt("created_at", q.cursor);
-    }
+    query = query.order("created_at", { ascending: false });
+    if (q.cursor) query = query.lt("created_at", q.cursor);
 
     const { data, error } = await query;
     if (error) return fail(error.message, 500);
 
-    const nextCursor =
-      q.sort === "recent" && data.length === q.limit ? data[data.length - 1].created_at : null;
+    const nextCursor = data.length === q.limit ? data[data.length - 1].created_at : null;
 
     return ok({ items: data, nextCursor });
   } catch (e) {

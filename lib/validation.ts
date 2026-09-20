@@ -21,12 +21,15 @@ export const createPostSchema = z.object({
   body: z.string().trim().max(4000, "본문은 4000자 이하").default(""),
 });
 
-export const createCommentSchema = z.object({
-  body: z.string().trim().min(1, "내용을 입력하세요").max(1000, "1000자 이하"),
+/**
+ * 찬성·반대와 그 이유.
+ * 이유를 optional 로 두지 않는 것이 이 기능의 핵심이다. 찬반만 세면 왜 그런지
+ * 알 수 없어서, 처음부터 이유를 함께 받도록 강제한다. DB 에도 같은 제약이 걸려 있다.
+ */
+export const reactionSchema = z.object({
+  stance: z.enum(["agree", "disagree"]),
+  reason: z.string().trim().min(1, "이유를 적어주세요").max(1000, "1000자 이하"),
 });
-
-/** 수정도 새로 쓸 때와 같은 규칙을 지켜야 한다. 빈 내용으로 고쳐 지우는 것을 막는다. */
-export const updateCommentSchema = createCommentSchema;
 
 /**
  * 로그인·회원가입에 쓰는 아이디와 비밀번호.
@@ -57,8 +60,9 @@ export const signUpSchema = credentialsSchema
     path: ["passwordConfirm"],
   });
 
+// 인기순을 없앴다. 찬반은 "몇 명이 눌렀나"보다 "왜 그랬나"를 보는 것이라
+// 수로 줄을 세우는 것이 뜻을 잃었다. 그래서 최신순만 남긴다.
 export const listQuerySchema = z.object({
-  sort: z.enum(["hot", "recent"]).default("hot"),
   status: z.enum(["all", "backlog", "discussing", "adopted", "parked"]).default("all"),
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
